@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>깜찍강아지와 함께 나도 생활 수학 요정</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Gaegu & Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cinna: {
+                            bg: '#F2F8FF',
+                            card: '#FFFFFF',
+                            primary: '#7BB3E8',
+                            primaryDark: '#4F88C0',
+                            secondary: '#FFB7C5',
+                            accent: '#FFE599',
+                            text: '#4A3E3D',
+                            border: '#CDE1F5',
+                            lightBg: '#EAF3FE',
+                            mint: '#A8E6CF',
+                            pinkLight: '#FFF0F3'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                        cute: ['Gaegu', 'cursive']
+                    },
+                    boxShadow: {
+                        'fluffy': '0 10px 25px -5px rgba(123, 179, 232, 0.28), 0 8px 10px -6px rgba(123, 179, 232, 0.15)',
+                        'button': '0 4px 0px 0px #4F88C0'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F2F8FF;
+            color: #4A3E3D;
+            user-select: none;
+        }
+        .text-cute {
+            font-family: 'Gaegu', cursive;
+        }
+        .cloud-card {
+            border-radius: 28px;
+        }
+        .bounce-gentle {
+            animation: bounce 2.2s infinite ease-in-out;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
+        }
+        .udl-xlarge-text { font-size: 1.4rem !important; line-height: 1.8 !important; }
+        .highlight-add { background-color: #E6F4EA; color: #137333; font-weight: bold; padding: 2px 8px; border-radius: 8px; border: 1px solid #CEEAD6; }
+        .highlight-sub { background-color: #FCE8E6; color: #C5221F; font-weight: bold; padding: 2px 8px; border-radius: 8px; border: 1px solid #FAD2CF; }
+        
+        .disabled-tab {
+            opacity: 0.55;
+            cursor: not-allowed;
+            background-color: #F3F4F6 !important;
+            color: #9CA3AF !important;
+        }
+        .grid-slot-active {
+            ring-width: 4px;
+            --tw-ring-color: #7BB3E8;
+            border-color: #4F88C0 !important;
+            background-color: #EAF3FE !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-cinna-bg">
+
+    <header class="bg-white/95 backdrop-blur border-b-2 border-cinna-border sticky top-0 z-30 shadow-sm px-4 py-3">
+        <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Logo & App Title -->
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-full bg-cinna-lightBg flex items-center justify-center border-2 border-cinna-primary shadow-xs">
+                    <svg class="w-8 h-8 text-cinna-primary" viewBox="0 0 100 100" fill="currentColor">
+                        <path d="M20 50 C5 30 5 60 25 65 C35 68 45 60 50 55 C55 60 65 68 75 65 C95 60 95 30 80 50 C70 63 50 63 20 50 Z" fill="#7BB3E8"/>
+                        <circle cx="38" cy="48" r="4" fill="#4A3E3D"/>
+                        <circle cx="62" cy="48" r="4" fill="#4A3E3D"/>
+                        <circle cx="28" cy="54" r="5" fill="#FFB7C5"/>
+                        <circle cx="72" cy="54" r="5" fill="#FFB7C5"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-2xl font-black text-cinna-primaryDark tracking-tight text-cute">
+                        깜찍강아지와 함께 나도 생활 수학 요정 🐾
+                    </h1>
+                    <p class="text-xs text-gray-500 font-medium hidden sm:block">느린학습자를 위한 보편적 학습 설계(UDL) 차근차근 문장제 수학</p>
+                </div>
+            </div>
+
+            <!-- Participant Info & Controls -->
+            <div class="flex items-center space-x-2">
+                <button onclick="openParticipantModal()" class="flex items-center space-x-2 bg-cinna-lightBg hover:bg-sky-100 border border-cinna-primary text-cinna-text text-xs md:text-sm font-bold py-1.5 px-3 rounded-full transition">
+                    <i class="fa-solid fa-user-gear text-cinna-primary"></i>
+                    <span id="headerParticipantName">참여자 정보 입력</span>
+                </button>
+
+                <button onclick="openTeacherSheet()" class="flex items-center space-x-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs md:text-sm font-bold py-1.5 px-3 rounded-full transition">
+                    <i class="fa-solid fa-chalkboard-user text-emerald-600"></i>
+                    <span class="hidden md:inline">지도교사</span> 시트
+                </button>
+
+                <!-- Accessibility UDL Tools -->
+                <button onclick="toggleAudioSpeech()" id="audioToggleBtn" title="읽기 도우미" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-amber-100 border border-amber-300 text-amber-800 flex items-center justify-center hover:bg-amber-200 transition">
+                    <i class="fa-solid fa-volume-high text-xs md:text-sm"></i>
+                </button>
+                <button onclick="toggleFontSize()" title="글자 크기 변경" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-purple-100 border border-purple-300 text-purple-800 flex items-center justify-center font-bold text-xs md:text-sm hover:bg-purple-200 transition">
+                    가+
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto w-full px-4 py-5 flex-grow">
+        
+        <!-- Activity Mode Navigation Bar -->
+        <div class="bg-white rounded-2xl p-2 md:p-3 shadow-md border-2 border-cinna-border mb-6 flex flex-wrap items-center justify-between gap-2">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full md:w-auto flex-grow">
+                <button id="tabAct1" onclick="switchActivity('act1')" class="py-2.5 px-2.5 rounded-xl font-bold text-xs md:text-sm transition bg-cinna-primary text-white shadow-xs flex items-center justify-center space-x-1">
+                    <i id="iconAct1" class="fa-solid fa-play"></i>
+                    <span>1활동: 핵심 알기</span>
+                </button>
+                <button id="tabAct2" onclick="switchActivity('act2')" class="py-2.5 px-2.5 rounded-xl font-bold text-xs md:text-sm transition disabled-tab flex items-center justify-center space-x-1">
+                    <i id="iconAct2" class="fa-solid fa-lock"></i>
+                    <span>2활동: 단계 연습</span>
+                </button>
+                <button id="tabAct3" onclick="switchActivity('act3')" class="py-2.5 px-2.5 rounded-xl font-bold text-xs md:text-sm transition disabled-tab flex items-center justify-center space-x-1">
+                    <i id="iconAct3" class="fa-solid fa-lock"></i>
+                    <span>3활동: 랜덤 도전</span>
+                </button>
+                <button id="tabAct4" onclick="switchActivity('act4')" class="py-2.5 px-2.5 rounded-xl font-bold text-xs md:text-sm transition disabled-tab flex items-center justify-center space-x-1">
+                    <i id="iconAct4" class="fa-solid fa-lock"></i>
+                    <span>4활동: 연산 업! 업!</span>
+                </button>
+            </div>
+
+            <!-- Current Stage / Progress Badge -->
+            <div id="progressBadgeBox" class="flex items-center justify-between md:justify-end w-full md:w-auto space-x-2 text-xs md:text-sm font-bold text-cinna-text pt-2 md:pt-0 border-t md:border-t-0 border-gray-100">
+                <span id="currentLevelBadge" class="bg-cinna-accent px-3 py-1 rounded-full border border-amber-300 text-xs">
+                    1활동: 핵심 키워드 익히기
+                </span>
+                <span class="text-cinna-primaryDark">
+                    맞힌 문제 <span id="solvedProblemCount" class="text-rose-500 font-black">0</span>개
+                </span>
+            </div>
+        </div>
+
+        <div id="viewAct1" class="space-y-6">
+            <div class="bg-white cloud-card p-6 shadow-fluffy border-4 border-cinna-lightBg">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-amber-100 text-amber-800 rounded-2xl flex items-center justify-center text-xl font-black">1</div>
+                    <div>
+                        <h2 class="text-xl font-black text-cinna-primaryDark text-cute">생활 속 문장제 수학 핵심 돋보기 🔍</h2>
+                        <p class="text-xs text-gray-500">문장을 읽고 더하기(+)인지 빼기(-)인지 찾으면 수학 요정이 돼요!</p>
+                    </div>
+                </div>
+
+                <!-- Tutorial Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-emerald-50/80 border-2 border-emerald-200 rounded-2xl p-4">
+                        <div class="flex items-center space-x-2 mb-2 text-emerald-800 font-bold">
+                            <i class="fa-solid fa-circle-plus text-emerald-600 text-lg"></i>
+                            <span class="text-base">언제 더할까요? (더하기 +)</span>
+                        </div>
+                        <p class="text-xs md:text-sm text-gray-700 leading-relaxed mb-3">
+                            수가 많아지거나 합칠 때 더해요!
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 text-xs font-bold">
+                            <span class="highlight-add">모두</span>
+                            <span class="highlight-add">합해서</span>
+                            <span class="highlight-add">더 모았더니</span>
+                            <span class="highlight-add">합쳐서</span>
+                            <span class="highlight-add">전체</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-rose-50/80 border-2 border-rose-200 rounded-2xl p-4">
+                        <div class="flex items-center space-x-2 mb-2 text-rose-800 font-bold">
+                            <i class="fa-solid fa-circle-minus text-rose-600 text-lg"></i>
+                            <span class="text-base">언제 뺄까요? (빼기 -)</span>
+                        </div>
+                        <p class="text-xs md:text-sm text-gray-700 leading-relaxed mb-3">
+                            수가 줄어들거나 비교할 때 빼요!
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 text-xs font-bold">
+                            <span class="highlight-sub">남은</span>
+                            <span class="highlight-sub">먹어버린</span>
+                            <span class="highlight-sub">주고 남은</span>
+                            <span class="highlight-sub">사용하여</span>
+                            <span class="highlight-sub">더 많은</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Key Practice Mini Quiz -->
+                <div class="bg-cinna-bg rounded-2xl p-5 border-2 border-cinna-border">
+                    <h3 class="font-bold text-cinna-primaryDark text-sm mb-3 flex items-center justify-between">
+                        <span class="flex items-center">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-2 text-amber-500"></i>
+                            연습하기: 다음 문장을 읽고 알맞은 기호를 눌러보세요!
+                        </span>
+                        <span class="text-xs font-bold text-cinna-primaryDark bg-white px-2.5 py-1 rounded-full border border-cinna-border">
+                            진행: <span id="tutorialProgressText" class="text-rose-500 font-black">0</span> / 4
+                        </span>
+                    </h3>
+                    
+                    <div id="tutorialQuizBox" class="bg-white p-4 rounded-xl border border-cinna-border shadow-xs text-center space-y-4">
+                        <p id="tutorialQuestionText" class="text-base md:text-lg font-bold text-gray-700 leading-relaxed">
+                            "상자에 귤 23개와 사과 15개가 있습니다. 과일은 <span class="highlight-add">모두</span> 몇 개일까요?"
+                        </p>
+
+                        <div class="flex justify-center space-x-4">
+                            <button onclick="checkTutorialAnswer('+')" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg rounded-xl shadow-button border-b-4 border-emerald-700 active:translate-y-1 active:shadow-none transition">
+                                <i class="fa-solid fa-plus mr-1"></i> 더하기 (+)
+                            </button>
+                            <button onclick="checkTutorialAnswer('-')" class="px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-black text-lg rounded-xl shadow-button border-b-4 border-rose-700 active:translate-y-1 active:shadow-none transition">
+                                <i class="fa-solid fa-minus mr-1"></i> 빼기 (-)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="act1NextContainer" class="hidden mt-4 text-center">
+                        <button onclick="completeActivity1AndGoNext()" class="w-full sm:w-auto px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-base md:text-lg rounded-2xl shadow-lg transition transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-circle-check mr-2"></i> 1활동 완료! 2활동(단계별 연습)으로 이동하기 ➔
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="viewWorkspace" class="hidden space-y-6">
+            
+            <!-- Mascot Header Card -->
+            <div class="bg-white cloud-card p-5 md:p-6 shadow-fluffy border-4 border-cinna-lightBg relative">
+                <div class="flex flex-col md:flex-row items-center gap-4">
+                    <div class="flex-shrink-0 text-center">
+                        <div class="w-24 h-24 md:w-28 md:h-28 mx-auto relative flex items-center justify-center bg-cinna-lightBg rounded-full border-2 border-cinna-border">
+                            <svg class="w-20 h-20 md:w-24 md:h-24 bounce-gentle" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 40 80 C 10 40 0 90 35 110 C 60 120 70 95 80 85" fill="#FFFFFF" stroke="#7BB3E8" stroke-width="4"/>
+                                <path d="M 160 80 C 190 40 200 90 165 110 C 140 120 130 95 120 85" fill="#FFFFFF" stroke="#7BB3E8" stroke-width="4"/>
+                                <ellipse cx="100" cy="85" rx="50" ry="38" fill="#FFFFFF" stroke="#7BB3E8" stroke-width="4"/>
+                                <circle cx="82" cy="82" r="5" fill="#4F88C0"/>
+                                <circle cx="118" cy="82" r="5" fill="#4F88C0"/>
+                                <ellipse cx="72" cy="92" rx="7" ry="4" fill="#FFB7C5"/>
+                                <ellipse cx="128" cy="92" rx="7" ry="4" fill="#FFB7C5"/>
+                                <path d="M 95 90 Q 100 96 105 90" stroke="#7BB3E8" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M 85 52 C 85 40 115 40 115 52 Z" fill="#FFB7C5"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-black text-cinna-primaryDark mt-1 inline-block bg-sky-100 px-2.5 py-0.5 rounded-full">
+                            시나몬롤 요정
+                        </span>
+                    </div>
+
+                    <div class="flex-grow w-full">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <span id="problemCategoryTag" class="text-xs font-bold px-2.5 py-1 rounded-md bg-sky-100 text-sky-800 border border-sky-200">
+                                    생활 속 수학
+                                </span>
+                                <span id="problemProgressTag" class="text-xs font-bold px-2.5 py-1 rounded-md bg-purple-100 text-purple-800 border border-purple-200">
+                                    문제 1 / 10
+                                </span>
+                            </div>
+                            <button onclick="readQuestionText()" class="flex items-center space-x-1 text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 px-3 py-1.5 rounded-lg border border-amber-300 transition">
+                                <i class="fa-solid fa-volume-high text-amber-600"></i>
+                                <span>소리로 듣기</span>
+                            </button>
+                        </div>
+
+                        <div id="questionContainer" class="text-base md:text-lg font-bold leading-relaxed text-cinna-text p-4 bg-cinna-bg rounded-2xl border-2 border-cinna-border">
+                            문제를 불러오는 중입니다...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workspace Grid Split -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                
+                <!-- Left: Tens/Ones Visual Manipulative -->
+                <div class="md:col-span-6 bg-white rounded-3xl p-5 shadow-md border-2 border-cinna-border flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3 border-b pb-2 border-gray-100">
+                            <h3 class="font-bold text-cinna-primaryDark flex items-center text-sm md:text-base">
+                                <i class="fa-solid fa-shapes mr-2 text-cinna-primary"></i> 십의 자리 & 일의 자리 수 모형
+                            </h3>
+                            <button onclick="toggleVisualManipulative()" id="btnToggleManipulative" class="text-xs bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold px-2.5 py-1 rounded-lg border border-sky-200">
+                                모형 숨기기
+                            </button>
+                        </div>
+
+                        <div id="manipulativeArea" class="space-y-3 my-2">
+                            <div class="bg-sky-50/70 p-3 rounded-xl border border-sky-100">
+                                <div class="text-xs font-bold text-gray-500 mb-1 flex items-center justify-between">
+                                    <span id="num1Label">첫 번째 수: 0</span>
+                                    <span class="text-sky-600 font-black" id="num1Breakdown">십: 0 / 일: 0</span>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <div id="num1TensBlocks" class="flex flex-wrap gap-1"></div>
+                                    <div class="h-6 w-0.5 bg-sky-200 mx-1"></div>
+                                    <div id="num1OnesBlocks" class="flex flex-wrap gap-1"></div>
+                                </div>
+                            </div>
+
+                            <div class="text-center font-black text-lg text-cinna-primary my-0.5" id="visualOperator">
+                                +
+                            </div>
+
+                            <div class="bg-rose-50/70 p-3 rounded-xl border border-rose-100">
+                                <div class="text-xs font-bold text-gray-500 mb-1 flex items-center justify-between">
+                                    <span id="num2Label">두 번째 수: 0</span>
+                                    <span class="text-rose-600 font-black" id="num2Breakdown">십: 0 / 일: 0</span>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <div id="num2TensBlocks" class="flex flex-wrap gap-1"></div>
+                                    <div class="h-6 w-0.5 bg-rose-200 mx-1"></div>
+                                    <div id="num2OnesBlocks" class="flex flex-wrap gap-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step-by-Step Hint Section -->
+                    <div class="mt-3 pt-3 border-t border-gray-100">
+                        <button onclick="toggleStepByStepHint()" class="w-full py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 rounded-xl font-bold text-xs md:text-sm flex items-center justify-center space-x-2 transition">
+                            <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                            <span>차근차근 풀이 힌트 보기</span>
+                        </button>
+                        <div id="stepHintBox" class="hidden mt-2 p-3 bg-amber-50/90 rounded-xl border border-amber-200 text-xs md:text-sm text-amber-950 leading-relaxed">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-6 bg-white rounded-3xl p-5 shadow-md border-2 border-cinna-border flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-cinna-primaryDark mb-2 border-b pb-2 border-gray-100 flex items-center justify-between text-xs md:text-base">
+                            <span id="workspaceTitleText"><i class="fa-solid fa-calculator mr-2 text-cinna-primary"></i> 세로셈과 정답 입력</span>
+                            <span id="workspaceSubtitleText" class="text-xs text-gray-400">일의 자리부터 시작해요!</span>
+                        </h3>
+
+                        <!-- Vertical Math Grid Box -->
+                        <div class="max-w-[240px] mx-auto bg-cinna-lightBg p-3 rounded-2xl border-2 border-cinna-primary/30 mb-3 shadow-inner">
+                            <!-- Carrying / Borrowing Visual Helper Row -->
+                            <div class="grid grid-cols-3 gap-1.5 text-center mb-1 text-xs font-bold text-rose-500 min-h-[18px]" id="carryingRow">
+                                <div></div>
+                                <div id="carryTens"></div>
+                                <div id="carryOnes"></div>
+                            </div>
+
+                            <!-- Num 1 Row -->
+                            <div class="grid grid-cols-3 gap-1.5 text-center text-xl font-black text-gray-700 py-1 border-b border-dashed border-gray-300">
+                                <div></div>
+                                <div id="gridTens1" onclick="selectSlot('tens1')" class="bg-white rounded-lg shadow-xs py-0.5 cursor-pointer border border-transparent transition">2</div>
+                                <div id="gridOnes1" onclick="selectSlot('ones1')" class="bg-white rounded-lg shadow-xs py-0.5 cursor-pointer border border-transparent transition">3</div>
+                            </div>
+
+                            <!-- Operator & Num 2 Row -->
+                            <div class="grid grid-cols-3 gap-1.5 text-center text-xl font-black text-gray-700 py-1 border-b-4 border-gray-700">
+                                <div id="gridOperator" onclick="selectSlot('operator')" class="text-cinna-primaryDark bg-white/50 rounded-lg py-0.5 cursor-pointer border border-transparent transition">+</div>
+                                <div id="gridTens2" onclick="selectSlot('tens2')" class="bg-white rounded-lg shadow-xs py-0.5 cursor-pointer border border-transparent transition">1</div>
+                                <div id="gridOnes2" onclick="selectSlot('ones2')" class="bg-white rounded-lg shadow-xs py-0.5 cursor-pointer border border-transparent transition">5</div>
+                            </div>
+
+                            <!-- Interactive Answer Row -->
+                            <div class="grid grid-cols-3 gap-1.5 text-center py-2">
+                                <div></div>
+                                <input type="text" id="inputTens" readonly onclick="selectSlot('tensAns')" placeholder="십" class="w-full text-center text-xl font-black bg-white rounded-lg border-2 border-cinna-primary cursor-pointer focus:outline-none py-1 transition">
+                                <input type="text" id="inputOnes" readonly onclick="selectSlot('onesAns')" placeholder="일" class="w-full text-center text-xl font-black bg-white rounded-lg border-2 border-cinna-primary cursor-pointer focus:outline-none py-1 transition">
+                            </div>
+                        </div>
+
+                        <!-- Combined Display -->
+                        <div class="text-center mb-3">
+                            <span class="text-xs font-bold text-gray-500">최종 정답: </span>
+                            <span id="finalAnswerDisplay" class="text-xl md:text-2xl font-black text-cinna-primaryDark underline decoration-wavy decoration-cinna-secondary">
+                                ?
+                            </span>
+                            <span class="text-xs font-bold text-gray-600" id="unitText">개</span>
+                        </div>
+                    </div>
+
+                    <!-- Operator Choice Buttons (Shown specially for Activity 4) -->
+                    <div id="act4OperatorControls" class="hidden mb-2 bg-sky-50 p-2 rounded-xl border border-sky-200">
+                        <div class="text-xs font-bold text-sky-900 mb-1 text-center">연산 기호 선택 (+ 또는 -):</div>
+                        <div class="flex justify-center gap-3">
+                            <button onclick="pressOperator('+')" class="px-5 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-base rounded-lg shadow-sm border-b-2 border-emerald-700 active:scale-95 transition">
+                                + 더하기
+                            </button>
+                            <button onclick="pressOperator('-')" class="px-5 py-1.5 bg-rose-500 hover:bg-rose-600 text-white font-black text-base rounded-lg shadow-sm border-b-2 border-rose-700 active:scale-95 transition">
+                                - 빼기
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Touch Keypad -->
+                    <div>
+                        <div class="grid grid-cols-3 gap-1.5 mb-2">
+                            <button onclick="pressKey('1')" class="py-2 bg-sky-50 hover:bg-sky-100 text-cinna-text text-lg font-black rounded-xl border-2 border-sky-200 active:scale-95 transition shadow-xs">1</button>
+                            <button onclick="pressKey('2')" class="py-2 bg-sky-50 hover:bg-sky-100 text-cinna-text text-lg font-black rounded-xl border-2 border-sky-200 active:scale-95 transition shadow-xs">2</button>
+                            <button onclick="pressKey('3')" class="py-2 bg-sky-50 hover:bg-sky-100 text-cinna-text text-lg font-black rounded-xl border-2 border-sky-200 active:scale-95 transition shadow-xs">3</button>
+                            <button onclick="pressKey('4')" class="py-2 bg-sky-50 hover:bg-sky-100 text-cinna-text text-lg font-black rounded-xl border-2 border-sky-200 active:scale-95 transition shadow-xs">4</button>
+                            <button onclick="pressKey('5')" class="py-2 bg-sky-50 hover:bg-sky-100 text-cinna-text text-lg font-black rounded-xl border-2 border-sky-200 active:scale-95 transition shadow-xs">5</button>
+                            <button onclick="pressKey('6')" class="py-2 bg-sky-50 hover:bg-sky-100 text-cinna-text text-lg font-black rounded-xl border-2 border-sky-200 active:scale-95 transition shadow-xs">6</button>
+                            <button onclick="pressKey('7')" class="py-2 bg-sky-50 hover:bg-sky-100 text-cinna-text text-lg font-black rounded-xl border-2 border-sky-200 active:scale-95 transition shadow-xs">7</button>
+                            <button onclick="pressKey('8')" class="py-2 bg-sky-50 hover:bg-sky-100 text-cinna-text text-lg font-black rounded-xl border-2 border-sky-200 active:scale-95 transition shadow-xs">8</button>
+                            <button onclick="pressKey('9')" class="py-2 bg-sky-50 hover:bg-sky-100 text-cinna-text text-lg font-black rounded-xl border-2 border-sky-200 active:scale-95 transition shadow-xs">9</button>
+                            <button onclick="pressKey('clear')" class="py-2 bg-rose-100 hover:bg-rose-200 text-rose-800 font-bold rounded-xl border-2 border-rose-200 active:scale-95 transition text-xs">지우기</button>
+                            <button onclick="pressKey('0')" class="py-2 bg-sky-50 hover:bg-sky-100 text-cinna-text text-lg font-black rounded-xl border-2 border-sky-200 active:scale-95 transition shadow-xs">0</button>
+                            <button onclick="switchFocusSlot()" class="py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded-xl border-2 border-amber-200 active:scale-95 transition text-xs">
+                                입력칸 이동
+                            </button>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button onclick="submitAnswer()" class="w-full py-3 bg-cinna-primary hover:bg-cinna-primaryDark text-white text-base md:text-lg font-black rounded-2xl shadow-button border-b-4 border-cinna-primaryDark active:translate-y-1 active:shadow-none transition">
+                            <i class="fa-solid fa-check-circle mr-1"></i> 정답 확인하기 🐾
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-cinna-border py-3 px-4 text-center mt-6">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500 font-medium">
+            <div class="flex items-center space-x-2">
+                <span class="bg-cinna-lightBg text-cinna-primaryDark font-bold px-2 py-0.5 rounded-md">느린학습자를 위한 수학 활동</span>
+                <span>보편적 학습 설계 (UDL)</span>
+            </div>
+            <div class="font-bold text-gray-700 tracking-wider">
+                2026 디지털 책갈피
+            </div>
+        </div>
+    </footer>
+
+    <!-- Participant Modal -->
+    <div id="participantModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-cinna-primary relative">
+            <div class="text-center mb-5">
+                <div class="w-16 h-16 bg-cinna-lightBg rounded-full mx-auto flex items-center justify-center text-cinna-primary text-3xl mb-2 border border-cinna-border">
+                    <i class="fa-solid fa-user-pen"></i>
+                </div>
+                <h2 class="text-2xl font-black text-cinna-primaryDark text-cute">학습자 정보 입력</h2>
+                <p class="text-xs text-gray-500">시나몬롤과 함께 수학 요정 모험을 시작해요!</p>
+            </div>
+
+            <form onsubmit="saveParticipantInfo(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">소속 / 학급 (예: 햇살반, 3학년 1반)</label>
+                    <input type="text" id="inputStudentClass" required placeholder="예: 햇살반" class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-cinna-primary focus:outline-none text-sm font-bold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">이름 (또는 별명)</label>
+                    <input type="text" id="inputStudentName" required placeholder="예: 김민수" class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-cinna-primary focus:outline-none text-sm font-bold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">지도교사 / 보호자 성함 (선택)</label>
+                    <input type="text" id="inputTeacherName" placeholder="예: 이선생님" class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-cinna-primary focus:outline-none text-sm font-bold">
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full py-3 bg-cinna-primary hover:bg-cinna-primaryDark text-white font-black text-base rounded-xl shadow-button border-b-4 border-cinna-primaryDark transition">
+                        수학 활동 시작하기 🐾
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Teacher Sheet Modal -->
+    <div id="teacherSheetModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col p-6 shadow-2xl border-4 border-emerald-400 relative">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-black text-emerald-800 flex items-center">
+                        <i class="fa-solid fa-chalkboard-user mr-2 text-emerald-600"></i> 지도교사 학습 기록 관리 시트
+                    </h2>
+                    <p class="text-xs text-gray-500">학생의 문장제 문제 풀이 정답률 및 UDL 수행 이력 기록</p>
+                </div>
+                <button onclick="closeTeacherSheet()" class="w-9 h-9 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-600">
+                    ✕
+                </button>
+            </div>
+
+            <div class="my-4 p-3 bg-emerald-50 rounded-2xl border border-emerald-200 flex flex-wrap items-center justify-between gap-2 text-xs md:text-sm">
+                <div>
+                    <span class="font-bold text-gray-600">현재 학습자:</span>
+                    <span id="sheetStudentBadge" class="font-black text-emerald-900 ml-1">미입력</span>
+                </div>
+                <div>
+                    <span class="font-bold text-gray-600">총 풀이 수:</span>
+                    <span id="sheetTotalSolved" class="font-black text-emerald-900 ml-1">0개</span>
+                </div>
+                <div>
+                    <span class="font-bold text-gray-600">정답률:</span>
+                    <span id="sheetAccuracy" class="font-black text-emerald-900 ml-1">0%</span>
+                </div>
+                <button onclick="exportSheetData()" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition">
+                    <i class="fa-solid fa-file-csv mr-1"></i> 데이터 CSV 복사
+                </button>
+            </div>
+
+            <div class="flex-grow overflow-y-auto border border-gray-200 rounded-xl mb-4">
+                <table class="w-full text-left border-collapse text-xs md:text-sm">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-700 font-bold border-b border-gray-200 sticky top-0">
+                            <th class="p-2.5">일시</th>
+                            <th class="p-2.5">학생이름</th>
+                            <th class="p-2.5">활동 구분</th>
+                            <th class="p-2.5">문제</th>
+                            <th class="p-2.5">제출답</th>
+                            <th class="p-2.5">정답</th>
+                            <th class="p-2.5">결과</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teacherSheetTableBody" class="divide-y divide-gray-100">
+                        <tr>
+                            <td colspan="7" class="p-6 text-center text-gray-400">아직 저장된 학습 기록이 없습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-between items-center pt-2">
+                <button onclick="requestClearRecords()" class="text-xs text-rose-500 hover:underline">
+                    기록 전체 초기화
+                </button>
+                <button onclick="closeTeacherSheet()" class="px-5 py-2 bg-emerald-700 text-white font-bold rounded-xl text-sm hover:bg-emerald-800">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Toast Modal -->
+    <div id="customToastModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border-4 border-cinna-primary">
+            <div id="toastIcon" class="w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center text-3xl bg-sky-100 text-cinna-primary">
+                <i class="fa-solid fa-bell"></i>
+            </div>
+            <h3 id="toastTitle" class="text-xl font-black mb-2 text-cinna-primaryDark text-cute">알림</h3>
+            <p id="toastMessage" class="text-sm font-medium text-gray-600 mb-5 leading-relaxed">알림 내용</p>
+            <button onclick="closeCustomToast()" class="w-full py-2.5 bg-cinna-primary hover:bg-cinna-primaryDark text-white font-bold rounded-xl transition">
+                확인
+            </button>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="customConfirmModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border-4 border-rose-300">
+            <div class="w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center text-3xl bg-rose-100 text-rose-500">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-xl font-black mb-2 text-rose-700 text-cute">기록 초기화 확인</h3>
+            <p class="text-sm font-medium text-gray-600 mb-5">모든 학생 학습 기록을 초기화하시겠습니까?</p>
+            <div class="flex gap-2">
+                <button onclick="closeCustomConfirm()" class="w-1/2 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition">취소</button>
+                <button onclick="confirmClearRecords()" class="w-1/2 py-2.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition">초기화</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Banner Modal -->
+    <div id="feedbackModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border-4 border-cinna-primary transform transition-all">
+            <div id="feedbackIcon" class="w-20 h-20 mx-auto mb-3 rounded-full flex items-center justify-center text-4xl"></div>
+            <h3 id="feedbackTitle" class="text-2xl font-black mb-1 text-cute">정답입니다!</h3>
+            <p id="feedbackMessage" class="text-sm font-medium text-gray-600 mb-4 leading-relaxed">정답을 맞히셨습니다! 🐾</p>
+            <button onclick="nextProblem()" class="w-full py-3 bg-cinna-primary hover:bg-cinna-primaryDark text-white font-black text-base rounded-xl shadow-md transition">
+                다음 문제 풀기 ➔
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 2활동 전용 단계별 12문제
+        const MATH_PROBLEMS_ACT2 = [
+            { id: 1, stage: 1, type: 'add', category: '과자 세기', title: '민수는 상자에 초코 과자 21개와 딸기 과자 14개를 넣었습니다. 상자 안에는 과자가 모두 몇 개 있을까요?', num1: 21, num2: 14, answer: 35, unit: '개', keywords: ['모두'], operator: '+', hasCarry: false, hint: '21과 14를 더해요. 일의 자리(1+4=5)와 십의 자리(2+1=3)를 순서대로 더해보세요!' },
+            { id: 2, stage: 1, type: 'add', category: '칭찬 스티커', title: '지우는 스티커 32장을 모았고, 선생님께 15장을 더 받았습니다. 지우의 스티커는 모두 몇 장일까요?', num1: 32, num2: 15, answer: 47, unit: '장', keywords: ['모두'], operator: '+', hasCarry: false, hint: '32 + 15를 계산해요. 일의 자리 2+5=7, 십의 자리 3+1=4 입니다.' },
+            { id: 3, stage: 1, type: 'add', category: '도서관 책', title: '도서관 1층에 책 43권이 있고, 2층에 25권이 있습니다. 도서관에 있는 책은 모두 몇 권일까요?', num1: 43, num2: 25, answer: 68, unit: '권', keywords: ['모두'], operator: '+', hasCarry: false, hint: '43과 25를 더해요. 일의 자리끼리 더하면 8, 십의 자리끼리 더하면 6이에요.' },
+            { id: 4, stage: 2, type: 'add', category: '과일 바구니', title: '상자에 귤 28개와 사과 15개가 있습니다. 상자에 있는 과일은 모두 몇 개일까요?', num1: 28, num2: 15, answer: 43, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '일의 자리 8+5=13 이므로, 10은 십의 자리에 올려주고 3만 일의 자리에 써요!' },
+            { id: 5, stage: 2, type: 'add', category: '스티커 수집', title: '유리는 스티커 37장을, 현수는 24장을 모았습니다. 두 사람이 모은 스티커는 모두 몇 장일까요?', num1: 37, num2: 24, answer: 61, unit: '장', keywords: ['모두'], operator: '+', hasCarry: true, hint: '일의 자리 7+4=11 입니다. 1을 십의 자리로 올려서 더해줍니다.' },
+            { id: 6, stage: 2, type: 'add', category: '장난감 정리', title: '상자에 인형 46개와 블록 27개가 들어있습니다. 상자 안 장난감은 모두 몇 개일까요?', num1: 46, num2: 27, answer: 73, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '일의 자리 6+7=13 이므로 1을 올리고, 십의 자리는 1+4+2=7 이 됩니다.' },
+            { id: 7, stage: 3, type: 'sub', category: '사탕 나눠먹기', title: '바구니에 사탕 48개가 있었습니다. 친구들과 23개를 나누어 먹었습니다. 남은 사탕은 몇 개일까요?', num1: 48, num2: 23, answer: 25, unit: '개', keywords: ['남은'], operator: '-', hasCarry: false, hint: '48 - 23을 계산해요. 일의 자리 8-3=5, 십의 자리 4-2=2 입니다.' },
+            { id: 8, stage: 3, type: 'sub', category: '색종이 접기', title: '영희는 색종이 56장을 가지고 있었습니다. 종이접기로 32장을 사용했습니다. 남은 색종이는 몇 장일까요?', num1: 56, num2: 32, answer: 24, unit: '장', keywords: ['남은'], operator: '-', hasCarry: false, hint: '56 - 32를 계산해요. 일의 자리 6-2=4, 십의 자리 5-3=2 입니다.' },
+            { id: 9, stage: 3, type: 'sub', category: '버스 하차', title: '버스에 승객 39명이 타고 있었습니다. 이번 정류장에서 15명이 내렸습니다. 버스에 남은 사람은 몇 명일까요?', num1: 39, num2: 15, answer: 24, unit: '명', keywords: ['남은'], operator: '-', hasCarry: false, hint: '39 - 15입니다. 일의 자리끼리 빼면 4, 십의 자리끼리 빼면 2가 됩니다.' },
+            { id: 10, stage: 4, type: 'sub', category: '초콜릿 상자', title: '초콜릿 상자에 초콜릿 52개가 들어있었습니다. 가족들이 25개를 먹었습니다. 남은 초콜릿은 몇 개일까요?', num1: 52, num2: 25, answer: 27, unit: '개', keywords: ['남은'], operator: '-', hasCarry: true, hint: '일의 자리 2에서 5를 뺄 수 없어요! 십의 자리에서 10을 빌려와 12 - 5 = 7을 계산해요.' },
+            { id: 11, stage: 4, type: 'sub', category: '만들기 재료', title: '선생님이 색종이 43장을 가지고 계셨습니다. 카드를 만드느라 18장을 쓰셨습니다. 남은 색종이는 몇 장일까요?', num1: 43, num2: 18, answer: 25, unit: '장', keywords: ['남은'], operator: '-', hasCarry: true, hint: '3에서 8을 못 빼므로 십의 자리에서 빌려옵니다. 일의 자리는 13-8=5, 십의 자리는 3-1=2가 됩니다.' },
+            { id: 12, stage: 4, type: 'sub', category: '꽃밭 가꾸기', title: '화단에 예쁜 꽃이 61송이 피어있었습니다. 선물하려고 27송이를 꺾었습니다. 남은 꽃은 몇 송이일까요?', num1: 61, num2: 27, answer: 34, unit: '송이', keywords: ['남은'], operator: '-', hasCarry: true, hint: '1에서 7을 못 빼므로 십의 자리 6에서 10을 가져와 11-7=4, 십의 자리는 5-2=3 입니다.' }
+        ];
+
+        // 3활동 전용 30개 문제 풀
+        const MATH_PROBLEMS_ACT3 = [
+            { id: 101, stage: 1, type: 'add', category: '빵집 쿠키', title: '빵집에서 아침에 쿠키 15개를 굽고, 오후에 23개를 더 구웠습니다. 오늘 구운 쿠키는 모두 몇 개일까요?', num1: 15, num2: 23, answer: 38, unit: '개', keywords: ['모두'], operator: '+', hasCarry: false, hint: '15 + 23을 구해요. 일의 자리 5+3=8, 십의 자리 1+2=3 입니다.' },
+            { id: 102, stage: 1, type: 'add', category: '학용품 연필', title: '서랍 속에 연필 31자루가 있고, 필통에 14자루가 있습니다. 연필은 모두 몇 자루일까요?', num1: 31, num2: 14, answer: 45, unit: '자루', keywords: ['모두'], operator: '+', hasCarry: false, hint: '31과 14를 더해요. 일의 자리는 1+4=5, 십의 자리는 3+1=4 입니다.' },
+            { id: 103, stage: 1, type: 'add', category: '농장 계란', title: '닭장에 아침에 계란 24개를 모았고, 저녁에 33개를 더 모았습니다. 계란은 모두 몇 개일까요?', num1: 24, num2: 33, answer: 57, unit: '개', keywords: ['모두'], operator: '+', hasCarry: false, hint: '24 + 33을 계산해요. 일의 자리 4+3=7, 십의 자리 2+3=5 입니다.' },
+            { id: 104, stage: 1, type: 'add', category: '공원 자전거', title: '공원에 빨간 자전거 42대와 파란 자전거 25대가 세워져 있습니다. 자전거는 모두 몇 대일까요?', num1: 42, num2: 25, answer: 67, unit: '대', keywords: ['모두'], operator: '+', hasCarry: false, hint: '42 + 25를 더합니다. 일의 자리 2+5=7, 십의 자리 4+2=6 입니다.' },
+            { id: 105, stage: 1, type: 'add', category: '동화책 읽기', title: '민영이는 어제 동화책을 53쪽 읽고, 오늘 24쪽을 더 읽었습니다. 읽은 쪽수는 모두 몇 쪽일까요?', num1: 53, num2: 24, answer: 77, unit: '쪽', keywords: ['모두'], operator: '+', hasCarry: false, hint: '53과 24를 더합니다. 일의 자리 3+4=7, 십의 자리 5+2=7 입니다.' },
+            { id: 106, stage: 1, type: 'add', category: '장난감 블록', title: '상자에 파란 블록 16개와 노란 블록 32개가 있습니다. 블록은 모두 몇 개일까요?', num1: 16, num2: 32, answer: 48, unit: '개', keywords: ['모두'], operator: '+', hasCarry: false, hint: '16 + 32를 계산해요. 일의 자리 6+2=8, 십의 자리 1+3=4 입니다.' },
+            { id: 107, stage: 1, type: 'add', category: '과수원 배', title: '과수원에서 어제 배 61개를 땄고 오늘 27개를 더 땄습니다. 따낸 배는 모두 몇 개일까요?', num1: 61, num2: 27, answer: 88, unit: '개', keywords: ['모두'], operator: '+', hasCarry: false, hint: '61과 27을 더합니다. 일의 자리 1+7=8, 십의 자리 6+2=8 입니다.' },
+            { id: 108, stage: 1, type: 'add', category: '놀이터 인형', title: '인형 상자에 곰인형 22개와 토끼인형 45개가 들어있습니다. 인형은 모두 몇 개일까요?', num1: 22, num2: 45, answer: 67, unit: '개', keywords: ['모두'], operator: '+', hasCarry: false, hint: '22 + 45를 구해요. 일의 자리 2+5=7, 십의 자리 2+4=6 입니다.' },
+            { id: 109, stage: 2, type: 'add', category: '가게 사탕', title: '가게에 청포도 사탕 27개와 딸기 사탕 15개가 있습니다. 사탕은 모두 몇 개일까요?', num1: 27, num2: 15, answer: 42, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '7+5=12 이므로 일의 자리에 2를 쓰고 10은 십의 자리에 올려요. 1+2+1=4가 됩니다.' },
+            { id: 110, stage: 2, type: 'add', category: '체육관 공', title: '체육관에 축구공 38개와 농구공 26개가 있습니다. 체육관의 공은 모두 몇 개일까요?', num1: 38, num2: 26, answer: 64, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '8+6=14 이므로 1을 올리고 일의 자리에 4를 씁니다. 십의 자리는 1+3+2=6 입니다.' },
+            { id: 111, stage: 2, type: 'add', category: '꽃집 장미', title: '꽃집에 빨간 장미 45송이와 노란 장미 28송이가 있습니다. 장미는 모두 몇 송이일까요?', num1: 45, num2: 28, answer: 73, unit: '송이', keywords: ['모두'], operator: '+', hasCarry: true, hint: '5+8=13 이므로 1을 올리고 일의 자리에 3을 씁니다. 십의 자리는 1+4+2=7 입니다.' },
+            { id: 112, stage: 2, type: 'add', category: '우유 배달', title: '아침에 흰 우유 19개와 딸기 우유 34개가 배달되었습니다. 배달된 우유는 모두 몇 개일까요?', num1: 19, num2: 34, answer: 53, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '9+4=13 이므로 1을 올려주고 일의 자리에 3을 씁니다. 십의 자리는 1+1+3=5 입니다.' },
+            { id: 113, stage: 2, type: 'add', category: '우표 모으기', title: '수진이는 우표 56장을 가지고 있었는데, 언니가 27장을 더 주었습니다. 우표는 모두 몇 장일까요?', num1: 56, num2: 27, answer: 83, unit: '장', keywords: ['모두'], operator: '+', hasCarry: true, hint: '6+7=13 이므로 1을 올려주고 일의 자리에 3을 씁니다. 십의 자리는 1+5+2=8 입니다.' },
+            { id: 114, stage: 2, type: 'add', category: '학교 구슬', title: '상자에 파란 구슬 39개와 초록 구슬 18개가 들어있습니다. 구슬은 모두 몇 개일까요?', num1: 39, num2: 18, answer: 57, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '9+8=17 이므로 1을 십의 자리에 올리고 일의 자리에 7을 씁니다. 1+3+1=5 입니다.' },
+            { id: 115, stage: 2, type: 'add', category: '바다 조개', title: '해변에서 민호는 조개 47개를 줍고, 선우는 35개를 줍았습니다. 두 사람이 주운 조개는 모두 몇 개일까요?', num1: 47, num2: 35, answer: 82, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '7+5=12 이므로 1을 올려주고, 십의 자리는 1+4+3=8 이 됩니다.' },
+            { id: 116, stage: 3, type: 'sub', category: '과자 상자', title: '과자 상자에 과자 47개가 들어있었습니다. 친구들과 23개를 나누어 먹었습니다. 남은 과자는 몇 개일까요?', num1: 47, num2: 23, answer: 24, unit: '개', keywords: ['남은'], operator: '-', hasCarry: false, hint: '47 - 23을 계산해요. 일의 자리 7-3=4, 십의 자리 4-2=2 입니다.' },
+            { id: 117, stage: 3, type: 'sub', category: '연필 세트', title: '문구점에 연필 58자루가 있었습니다. 오늘 35자루가 팔렸습니다. 남은 연필은 몇 자루일까요?', num1: 58, num2: 35, answer: 23, unit: '자루', keywords: ['남은'], operator: '-', hasCarry: false, hint: '58 - 35입니다. 일의 자리 8-5=3, 십의 자리 5-3=2 입니다.' },
+            { id: 118, stage: 3, type: 'sub', category: '동전 저금통', title: '저금통에 100원짜리 동전 39개가 있었습니다. 문구점에서 14개를 사용했습니다. 남은 동전은 몇 개일까요?', num1: 39, num2: 14, answer: 25, unit: '개', keywords: ['남은'], operator: '-', hasCarry: false, hint: '39 - 14를 계산해요. 일의 자리 9-4=5, 십의 자리 3-1=2 입니다.' },
+            { id: 119, stage: 3, type: 'sub', category: '과일가게 사과', title: '과일가게에 사과 65상자가 있었습니다. 아침에 21상자를 판매했습니다. 남은 사과는 몇 상자일까요?', num1: 65, num2: 21, answer: 44, unit: '상자', keywords: ['남은'], operator: '-', hasCarry: false, hint: '65 - 21을 계산해요. 일의 자리 5-1=4, 십의 자리 6-2=4 입니다.' },
+            { id: 120, stage: 3, type: 'sub', category: '도서관 잡지', title: '선반에 잡지 76권이 꽂혀 있었습니다. 학생들이 42권을 대출해 갔습니다. 남은 잡지는 몇 권일까요?', num1: 76, num2: 42, answer: 34, unit: '권', keywords: ['남은'], operator: '-', hasCarry: false, hint: '76 - 42를 계산해요. 일의 자리 6-2=4, 십의 자리 7-4=3 입니다.' },
+            { id: 121, stage: 3, type: 'sub', category: '스케치북 장수', title: '새 스케치북에 종이가 84장 있었습니다. 그림을 그리느라 51장을 썼습니다. 남은 종이는 몇 장일까요?', num1: 84, num2: 51, answer: 33, unit: '장', keywords: ['남은'], operator: '-', hasCarry: false, hint: '84 - 51을 빼줍니다. 일의 자리 4-1=3, 십의 자리 8-5=3 입니다.' },
+            { id: 122, stage: 3, type: 'sub', category: '주스 통', title: '냉장고에 컵주스가 29개 있었습니다. 간식 시간에 16개를 마셨습니다. 남은 주스는 몇 개일까요?', num1: 29, num2: 16, answer: 13, unit: '개', keywords: ['남은'], operator: '-', hasCarry: false, hint: '29 - 16을 계산해요. 일의 자리 9-6=3, 십의 자리 2-1=1 입니다.' },
+            { id: 123, stage: 4, type: 'sub', category: '빵집 식빵', title: '빵집에 식빵 52개가 갓 구워져 나왔습니다. 단체 손님이 27개를 사 갔습니다. 남은 식빵은 몇 개일까요?', num1: 52, num2: 27, answer: 25, unit: '개', keywords: ['남은'], operator: '-', hasCarry: true, hint: '일의 자리 2에서 7을 뺄 수 없으므로 십의 자리 5에서 10을 빌려와 12-7=5, 십의 자리는 4-2=2 입니다.' },
+            { id: 124, stage: 4, type: 'sub', category: '색연필 상자', title: '미술실에 색연필이 41자루 있었습니다. 미술 수업에 18자루를 썼습니다. 남은 색연필은 몇 자루일까요?', num1: 41, num2: 18, answer: 23, unit: '자루', keywords: ['남은'], operator: '-', hasCarry: true, hint: '1에서 8을 빼지 못해 십의 자리 4에서 빌려옵니다. 11-8=3, 십의 자리는 3-1=2 입니다.' },
+            { id: 125, stage: 4, type: 'sub', category: '목장 우유통', title: '목장에 우유통이 63개 있었습니다. 오전에 29개를 트럭에 실어 보냈습니다. 남은 우유통은 몇 개일까요?', num1: 63, num2: 29, answer: 34, unit: '개', keywords: ['남은'], operator: '-', hasCarry: true, hint: '3에서 9를 못 빼므로 십의 자리에서 빌려옵니다. 13-9=4, 십의 자리는 5-2=3 입니다.' },
+            { id: 126, stage: 4, type: 'sub', category: '주차장 자동차', title: '주차장에 자동차가 70대 있었습니다. 퇴근 시간에 34대가 나갔습니다. 남은 자동차는 몇 대일까요?', num1: 70, num2: 34, answer: 36, unit: '대', keywords: ['남은'], operator: '-', hasCarry: true, hint: '0에서 4를 빼지 못해 십의 자리 7에서 10을 빌려옵니다. 10-4=6, 십의 자리는 6-3=3 입니다.' },
+            { id: 127, stage: 4, type: 'sub', category: '화단 튤립', title: '화단에 예쁜 튤립이 85송이 피었습니다. 꽃다발을 만드느라 47송이를 꺾었습니다. 남은 튤립은 몇 송이일까요?', num1: 85, num2: 47, answer: 38, unit: '송이', keywords: ['남은'], operator: '-', hasCarry: true, hint: '5에서 7을 못 빼므로 빌려옵니다. 일의 자리는 15-7=8, 십의 자리는 7-4=3 입니다.' },
+            { id: 128, stage: 4, type: 'sub', category: '달콤 포도', title: '상자에 포도가 34송이 들어있었습니다. 친구 잔치에 16송이를 나누어 주었습니다. 남은 포도는 몇 송이일까요?', num1: 34, num2: 16, answer: 18, unit: '송이', keywords: ['남은'], operator: '-', hasCarry: true, hint: '4에서 6을 못 빼므로 빌려옵니다. 일의 자리는 14-6=8, 십의 자리는 2-1=1 입니다.' },
+            { id: 129, stage: 4, type: 'sub', category: '학급 문고', title: '학급 문고에 만화책이 91권 있었습니다. 방학 동안 학생들이 45권을 빌려갔습니다. 남은 만화책은 몇 권일까요?', num1: 91, num2: 45, answer: 46, unit: '권', keywords: ['남은'], operator: '-', hasCarry: true, hint: '1에서 5를 못 빼므로 십의 자리 9에서 빌려옵니다. 11-5=6, 십의 자리는 8-4=4 입니다.' },
+            { id: 130, stage: 4, type: 'sub', category: '장난감 기차', title: '상자에 장난감 기차가 53개 있었습니다. 유치원에 28개를 기부했습니다. 남은 기차는 몇 개일까요?', num1: 53, num2: 28, answer: 25, unit: '개', keywords: ['남은'], operator: '-', hasCarry: true, hint: '3에서 8을 못 빼므로 십의 자리 5에서 빌려옵니다. 13-8=5, 십의 자리는 4-2=2 입니다.' }
+        ];
+
+        // 4활동 전용 20개 문제 풀 (세로셈 숫자 & 연산기호 직접 선택)
+        const MATH_PROBLEMS_ACT4 = [
+            { id: 201, category: '달콤 마카롱', title: '디저트 카페에 마카롱이 35개 있었습니다. 손님이 18개를 구매해 갔습니다. 남은 마카롱은 몇 개일까요?', num1: 35, num2: 18, answer: 17, unit: '개', keywords: ['남은'], operator: '-', hasCarry: true, hint: '문장의 수 35, 18과 키워드 "남은(-)"을 세로셈에 옮겨 적어보세요!' },
+            { id: 202, category: '학교 문구', title: '선생님이 풀 26개와 테이프 19개를 사 오셨습니다. 문구는 모두 몇 개일까요?', num1: 26, num2: 19, answer: 45, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '문장의 수 26, 19와 키워드 "모두(+)"를 세로셈에 채워 넣으세요!' },
+            { id: 203, category: '공원 나비', title: '공원 꽃밭에 나비 42마리가 앉아 있었는데, 15마리가 날아갔습니다. 남아있는 나비는 몇 마리일까요?', num1: 42, num2: 15, answer: 27, unit: '마리', keywords: ['남아있는'], operator: '-', hasCarry: true, hint: '42에서 15를 빼는 세로셈을 완성하세요!' },
+            { id: 204, category: '맛있는 도넛', title: '도넛 상자에 24개가 있고, 트레이에 37개가 있습니다. 도넛은 모두 몇 개일까요?', num1: 24, num2: 37, answer: 61, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '24와 37을 더하는 세로셈을 만들어 풀이하세요!' },
+            { id: 205, category: '학용품 지우개', title: '상자에 지우개 50개가 들어 있었습니다. 학생들에게 23개를 나누어 주었습니다. 남은 지우개는 몇 개일까요?', num1: 50, num2: 23, answer: 27, unit: '개', keywords: ['남은'], operator: '-', hasCarry: true, hint: '50 - 23 식을 세로셈에 완성하세요!' },
+            { id: 206, category: '가게 사과주스', title: '마트에 사과주스 38병과 오렌지주스 25병이 들어왔습니다. 주스는 모두 몇 병일까요?', num1: 38, num2: 25, answer: 63, unit: '병', keywords: ['모두'], operator: '+', hasCarry: true, hint: '38 + 25 식을 세로셈에 작성하세요!' },
+            { id: 207, category: '축구 연습', title: '동아리 방에 축구공 29개가 있었는데 14개를 새로 더 샀습니다. 축구공은 모두 몇 개일까요?', num1: 29, num2: 14, answer: 43, unit: '개', keywords: ['더 샀습니다', '모두'], operator: '+', hasCarry: true, hint: '29 + 14 세로셈을 작성하세요!' },
+            { id: 208, category: '단풍잎 수집', title: '지수가 단풍잎 63장을 모았습니다. 그 중 28장을 친구에게 주었습니다. 지수에게 남은 단풍잎은 몇 장일까요?', num1: 63, num2: 28, answer: 35, unit: '장', keywords: ['남은'], operator: '-', hasCarry: true, hint: '63 - 28 식을 만들어 계산하세요!' },
+            { id: 209, category: '동물원 펭귄', title: '동물원 수조에 펭귄 27마리가 놀고 있었고 16마리가 물속으로 더 들어왔습니다. 수조의 펭귄은 모두 몇 마리일까요?', num1: 27, num2: 16, answer: 43, unit: '마리', keywords: ['모두'], operator: '+', hasCarry: true, hint: '27 + 16 세로셈을 입력하세요!' },
+            { id: 210, category: '새싹 가꾸기', title: '화분에 화초 45포기가 자라고 있었습니다. 19포기를 화단에 옮겨 심었습니다. 화분에 남은 화초는 몇 포기일까요?', num1: 45, num2: 19, answer: 26, unit: '포기', keywords: ['남은'], operator: '-', hasCarry: true, hint: '45 - 19 세로셈을 완성하세요!' },
+            { id: 211, category: '도서관 아동도서', title: '아동실 선반에 위인전 33권과 과학책 48권이 있습니다. 선반의 책은 모두 몇 권일까요?', num1: 33, num2: 48, answer: 81, unit: '권', keywords: ['모두'], operator: '+', hasCarry: true, hint: '33 + 48 식을 작성하세요!' },
+            { id: 212, category: '음료수 캔', title: '자판기에 음료수 72캔이 채워져 있었습니다. 하루 동안 36캔이 팔렸습니다. 남은 음료수는 몇 캔일까요?', num1: 72, num2: 36, answer: 36, unit: '캔', keywords: ['남은'], operator: '-', hasCarry: true, hint: '72 - 36 세로셈을 만들어보세요!' },
+            { id: 213, category: '장난감 자동차', title: '상자에 파란 기차 17개와 빨간 기차 26개가 들어 있습니다. 기차는 모두 몇 개일까요?', num1: 17, num2: 26, answer: 43, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '17 + 26 세로셈을 완성해 보세요!' },
+            { id: 214, category: '달콤 알사탕', title: '사탕병에 알사탕 54개가 들어 있었습니다. 간식 시간에 27개를 나누어 먹었습니다. 남은 사탕은 몇 개일까요?', num1: 54, num2: 27, answer: 27, unit: '개', keywords: ['남은'], operator: '-', hasCarry: true, hint: '54 - 27 식을 만들어 계산하세요!' },
+            { id: 215, category: '색종이 모음', title: '민호가 빨간 색종이 46장과 노란 색종이 35장을 가지고 있습니다. 색종이는 모두 몇 장일까요?', num1: 46, num2: 35, answer: 81, unit: '장', keywords: ['모두'], operator: '+', hasCarry: true, hint: '46 + 35 식을 세로셈에 입력하세요!' },
+            { id: 216, category: '농장 고구마', title: '고구마 밭에서 아침에 61개를 밭에서 캐내고, 24개를 상자에 담아 보냈습니다. 남은 고구마는 몇 개일까요?', num1: 61, num2: 24, answer: 37, unit: '개', keywords: ['남은'], operator: '-', hasCarry: true, hint: '61 - 24 세로셈을 작성하세요!' },
+            { id: 217, category: '바다 조개껍데기', title: '바닷가에서 예쁜 조개껍데기 28개와 소라껍데기 39개를 주웠습니다. 모두 몇 개일까요?', num1: 28, num2: 39, answer: 67, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '28 + 39 식을 세로셈에 맞춰 입력하세요!' },
+            { id: 218, category: '선물 상자', title: '선물 상자에 리본 80cm가 들어있었는데 포장하느라 43cm를 잘라 썼습니다. 남은 리본은 몇 cm일까요?', num1: 80, num2: 43, answer: 37, unit: 'cm', keywords: ['남은'], operator: '-', hasCarry: true, hint: '80 - 43 식을 세로셈에 옮겨 적으세요!' },
+            { id: 219, category: '과수원 감', title: '과수원에서 단감 47개와 홍시 36개를 땄습니다. 딴 감은 모두 몇 개일까요?', num1: 47, num2: 36, answer: 83, unit: '개', keywords: ['모두'], operator: '+', hasCarry: true, hint: '47 + 36 식을 만들어 답을 입력해보세요!' },
+            { id: 220, category: '학교 운동장', title: '운동장에 학생 65명이 모여 놀고 있었습니다. 수업 종이 울려 38명이 교실로 들어갔습니다. 운동장에 남은 학생은 몇 명일까요?', num1: 65, num2: 38, answer: 27, unit: '명', keywords: ['남은'], operator: '-', hasCarry: true, hint: '65 - 38 식을 세로셈으로 작성하세요!' }
+        ];
+
+        let currentActivity = 'act1'; // 'act1', 'act2', 'act3', 'act4'
+        let unlockedActivities = { act1: true, act2: false, act3: false, act4: false };
+        let currentProblemIndex = 0;
+        let playList = [];
+        
+        // Active slot tracking for Activity 4 (or 2/3)
+        // Slots: 'tens1', 'ones1', 'operator', 'tens2', 'ones2', 'tensAns', 'onesAns'
+        let activeSlot = 'onesAns';
+        
+        // Grid Inputs State
+        let actGridState = {
+            tens1: '',
+            ones1: '',
+            operator: '+',
+            tens2: '',
+            ones2: '',
+            tensAns: '',
+            onesAns: ''
+        };
+
+        let isAudioEnabled = true;
+        let isLargeFont = false;
+        let showManipulative = true;
+        let totalSolvedCount = 0;
+
+        let tutorialStep = 0;
+        let completedTutorialCount = 0;
+
+        let participantInfo = { studentClass: '', studentName: '학습자', teacherName: '' };
+        let teacherRecords = [];
+
+        window.onload = function() {
+            openParticipantModal();
+            setupKeyboardEvents();
+            updateTabLockUI();
+
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+            }
+        };
+
+        function openParticipantModal() {
+            document.getElementById('participantModal').classList.remove('hidden');
+        }
+
+        function saveParticipantInfo(e) {
+            e.preventDefault();
+            participantInfo.studentClass = document.getElementById('inputStudentClass').value.trim();
+            participantInfo.studentName = document.getElementById('inputStudentName').value.trim();
+            participantInfo.teacherName = document.getElementById('inputTeacherName').value.trim();
+
+            document.getElementById('headerParticipantName').textContent = `${participantInfo.studentClass} ${participantInfo.studentName}`;
+            document.getElementById('participantModal').classList.add('hidden');
+            updateSheetSummary();
+        }
+
+        function updateTabLockUI() {
+            const tabs = ['act1', 'act2', 'act3', 'act4'];
+            tabs.forEach(actKey => {
+                const tabBtn = document.getElementById(actKey === 'act1' ? 'tabAct1' : actKey === 'act2' ? 'tabAct2' : actKey === 'act3' ? 'tabAct3' : 'tabAct4');
+                const icon = document.getElementById(actKey === 'act1' ? 'iconAct1' : actKey === 'act2' ? 'iconAct2' : actKey === 'act3' ? 'iconAct3' : 'iconAct4');
+
+                if (unlockedActivities[actKey]) {
+                    tabBtn.classList.remove('disabled-tab');
+                    if (currentActivity === actKey) {
+                        tabBtn.className = "py-2.5 px-2.5 rounded-xl font-bold text-xs md:text-sm transition bg-cinna-primary text-white shadow-xs flex items-center justify-center space-x-1";
+                        icon.className = "fa-solid fa-play";
+                    } else {
+                        tabBtn.className = "py-2.5 px-2.5 rounded-xl font-bold text-xs md:text-sm transition bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 flex items-center justify-center space-x-1";
+                        icon.className = "fa-solid fa-circle-check text-emerald-500";
+                    }
+                } else {
+                    tabBtn.className = "py-2.5 px-2.5 rounded-xl font-bold text-xs md:text-sm transition disabled-tab flex items-center justify-center space-x-1";
+                    icon.className = "fa-solid fa-lock";
+                }
+            });
+        }
+
+        function switchActivity(actKey) {
+            if (!unlockedActivities[actKey]) {
+                const actNames = { act2: '1활동(핵심 알기)', act3: '2활동(단계별 연습)', act4: '3활동(랜덤 도전)' };
+                showToastNotification(`이전 활동인 [${actNames[actKey]}]을 마무리해야 다음 활동으로 이동할 수 있습니다! 🐾`, '활동 잠금');
+                return;
+            }
+
+            currentActivity = actKey;
+            updateTabLockUI();
+
+            document.getElementById('viewAct1').classList.add('hidden');
+            document.getElementById('viewWorkspace').classList.add('hidden');
+
+            const badge = document.getElementById('currentLevelBadge');
+
+            if (actKey === 'act1') {
+                document.getElementById('viewAct1').classList.remove('hidden');
+                badge.textContent = '1활동: 핵심 키워드 익히기';
+            } else if (actKey === 'act2') {
+                document.getElementById('viewWorkspace').classList.remove('hidden');
+                badge.textContent = '2활동: 단계별 연습 마스터';
+                playList = [...MATH_PROBLEMS_ACT2];
+                currentProblemIndex = 0;
+                renderProblem();
+            } else if (actKey === 'act3') {
+                document.getElementById('viewWorkspace').classList.remove('hidden');
+                badge.textContent = '3활동: 랜덤 도전 모드';
+                const shuffled = [...MATH_PROBLEMS_ACT3].sort(() => Math.random() - 0.5);
+                playList = shuffled.slice(0, 10);
+                currentProblemIndex = 0;
+                renderProblem();
+            } else if (actKey === 'act4') {
+                document.getElementById('viewWorkspace').classList.remove('hidden');
+                badge.textContent = '4활동: 연산 업! 업!';
+                // Draw 5 random problems from 20 Act 4 problems
+                const shuffled4 = [...MATH_PROBLEMS_ACT4].sort(() => Math.random() - 0.5);
+                playList = shuffled4.slice(0, 5);
+                currentProblemIndex = 0;
+                renderProblem();
+            }
+        }
+
+        const TUTORIAL_QUIZZES = [
+            { text: '"상자에 귤 23개와 사과 15개가 있습니다. 과일은 <span class=\'highlight-add\'>모두</span> 몇 개일까요?"', ans: '+' },
+            { text: '"사탕 48개 중에서 친구들과 23개를 나누어 먹었습니다. <span class=\'highlight-sub\'>남은</span> 사탕은 몇 개일까요?"', ans: '-' },
+            { text: '"지우가 스티커 32장에 15장을 <span class=\'highlight-add\'>더 모았더니</span> 모두 몇 장이 될까요?"', ans: '+' },
+            { text: '"색종이 56장 중 32장을 <span class=\'highlight-sub\'>사용하여</span> 종이접기를 했습니다. 남은 종이는 몇 장일까요?"', ans: '-' }
+        ];
+
+        function checkTutorialAnswer(symbol) {
+            const current = TUTORIAL_QUIZZES[tutorialStep];
+            if (symbol === current.ans) {
+                completedTutorialCount++;
+                document.getElementById('tutorialProgressText').textContent = completedTutorialCount;
+
+                if (completedTutorialCount >= 4) {
+                    showToastNotification('1활동의 모든 키워드 연습을 완료하셨습니다! 2활동이 잠금 해제되었습니다! 🎉', '참 잘했어요!');
+                    unlockedActivities.act2 = true;
+                    updateTabLockUI();
+                    document.getElementById('act1NextContainer').classList.remove('hidden');
+                } else {
+                    showToastNotification('정답입니다! 키워드를 아주 잘 찾으셨네요! 🐾', '참 잘했어요!');
+                    tutorialStep = (tutorialStep + 1) % TUTORIAL_QUIZZES.length;
+                    document.getElementById('tutorialQuestionText').innerHTML = TUTORIAL_QUIZZES[tutorialStep].text;
+                }
+            } else {
+                showToastNotification('아쉬워요! "모두/합해서"는 더하기(+), "남은/사용한"은 빼기(-)입니다.', '다시 해볼까요?');
+            }
+        }
+
+        function completeActivity1AndGoNext() {
+            unlockedActivities.act2 = true;
+            switchActivity('act2');
+        }
+
+        function renderProblem() {
+            const prob = playList[currentProblemIndex];
+
+            const stageNames = { 1: '1단계: 받아올림 없는 덧셈', 2: '2단계: 받아올림 1회 덧셈', 3: '3단계: 받아내림 없는 뺄셈', 4: '4단계: 받아내림 1회 뺄셈' };
+            
+            if (currentActivity === 'act2') {
+                document.getElementById('currentLevelBadge').textContent = stageNames[prob.stage];
+            } else if (currentActivity === 'act3') {
+                document.getElementById('currentLevelBadge').textContent = `3활동: 랜덤 도전 (${stageNames[prob.stage]})`;
+            } else if (currentActivity === 'act4') {
+                document.getElementById('currentLevelBadge').textContent = `4활동: 연산 업! 업! (${currentProblemIndex + 1}/5)`;
+            }
+            
+            document.getElementById('problemCategoryTag').textContent = prob.category;
+            document.getElementById('problemProgressTag').textContent = `문제 ${currentProblemIndex + 1} / ${playList.length}`;
+
+            // UDL Highlighting
+            let highlightedText = prob.title;
+            if (prob.type === 'add') {
+                prob.keywords.forEach(kw => { highlightedText = highlightedText.replace(kw, `<span class="highlight-add">${kw}</span>`); });
+            } else {
+                prob.keywords.forEach(kw => { highlightedText = highlightedText.replace(kw, `<span class="highlight-sub">${kw}</span>`); });
+            }
+            document.getElementById('questionContainer').innerHTML = highlightedText;
+
+            // Reset grid state according to activity
+            if (currentActivity === 'act4') {
+                // In Act 4: Grid numbers and operator are empty! User must select/type them.
+                actGridState = {
+                    tens1: '?',
+                    ones1: '?',
+                    operator: '?',
+                    tens2: '?',
+                    ones2: '?',
+                    tensAns: '',
+                    onesAns: ''
+                };
+                document.getElementById('workspaceTitleText').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2 text-cinna-primary"></i> 세로셈 수/기호 & 답 입력';
+                document.getElementById('workspaceSubtitleText').textContent = '문장의 수, 연산기호, 답을 모두 채워보세요!';
+                document.getElementById('act4OperatorControls').classList.remove('hidden');
+                activeSlot = 'tens1';
+            } else {
+                // In Act 2 and 3: Numbers and operator are pre-filled
+                const t1 = Math.floor(prob.num1 / 10).toString();
+                const o1 = (prob.num1 % 10).toString();
+                const t2 = Math.floor(prob.num2 / 10).toString();
+                const o2 = (prob.num2 % 10).toString();
+
+                actGridState = {
+                    tens1: t1,
+                    ones1: o1,
+                    operator: prob.operator,
+                    tens2: t2,
+                    ones2: o2,
+                    tensAns: '',
+                    onesAns: ''
+                };
+                document.getElementById('workspaceTitleText').innerHTML = '<i class="fa-solid fa-calculator mr-2 text-cinna-primary"></i> 세로셈과 정답 입력';
+                document.getElementById('workspaceSubtitleText').textContent = '일의 자리부터 시작해요!';
+                document.getElementById('act4OperatorControls').classList.add('hidden');
+                activeSlot = 'onesAns';
+            }
+
+            updateGridDOMDisplay();
+
+            // Carry row
+            const carryTens = document.getElementById('carryTens');
+            const carryOnes = document.getElementById('carryOnes');
+            carryTens.textContent = ''; carryOnes.textContent = '';
+            if (prob.hasCarry) {
+                if (prob.type === 'add') carryTens.textContent = '①';
+                else { carryTens.textContent = '-1'; carryOnes.textContent = '⑩'; }
+            }
+
+            document.getElementById('finalAnswerDisplay').textContent = '?';
+            document.getElementById('unitText').textContent = prob.unit;
+
+            highlightActiveSlot();
+            renderManipulative(prob);
+
+            document.getElementById('stepHintBox').classList.add('hidden');
+            document.getElementById('stepHintBox').innerHTML = prob.hint;
+
+            if (isAudioEnabled) readQuestionText();
+        }
+
+        function updateGridDOMDisplay() {
+            document.getElementById('gridTens1').textContent = actGridState.tens1;
+            document.getElementById('gridOnes1').textContent = actGridState.ones1;
+            document.getElementById('gridOperator').textContent = actGridState.operator;
+            document.getElementById('gridTens2').textContent = actGridState.tens2;
+            document.getElementById('gridOnes2').textContent = actGridState.ones2;
+            document.getElementById('inputTens').value = actGridState.tensAns;
+            document.getElementById('inputOnes').value = actGridState.onesAns;
+
+            const tensVal = actGridState.tensAns || '0';
+            const onesVal = actGridState.onesAns || '0';
+            const fullVal = parseInt(tensVal + onesVal, 10);
+            document.getElementById('finalAnswerDisplay').textContent = (actGridState.tensAns || actGridState.onesAns) ? fullVal : '?';
+        }
+
+        function renderManipulative(prob) {
+            const num1Tens = Math.floor(prob.num1 / 10);
+            const num1Ones = prob.num1 % 10;
+            const num2Tens = Math.floor(prob.num2 / 10);
+            const num2Ones = prob.num2 % 10;
+
+            document.getElementById('num1Label').textContent = `첫 번째 수: ${prob.num1}`;
+            document.getElementById('num1Breakdown').textContent = `십: ${num1Tens} / 일: ${num1Ones}`;
+            document.getElementById('num2Label').textContent = `두 번째 수: ${prob.num2}`;
+            document.getElementById('num2Breakdown').textContent = `십: ${num2Tens} / 일: ${num2Ones}`;
+            document.getElementById('visualOperator').textContent = prob.operator === '+' ? '+ 더하기' : '- 빼기';
+
+            document.getElementById('num1TensBlocks').innerHTML = generateTenBundles(num1Tens, 'sky');
+            document.getElementById('num1OnesBlocks').innerHTML = generateSingleUnits(num1Ones, 'sky');
+            document.getElementById('num2TensBlocks').innerHTML = generateTenBundles(num2Tens, 'rose');
+            document.getElementById('num2OnesBlocks').innerHTML = generateSingleUnits(num2Ones, 'rose');
+        }
+
+        function generateTenBundles(count, color) {
+            let html = '';
+            const bgClass = color === 'sky' ? 'bg-sky-400' : 'bg-rose-400';
+            for (let i = 0; i < count; i++) {
+                html += `<div class="flex flex-col gap-0.5 p-1 bg-white rounded border border-gray-200 shadow-xs" title="10개 묶음">
+                    <div class="w-2.5 h-1 ${bgClass} rounded-xs"></div>
+                    <div class="w-2.5 h-1 ${bgClass} rounded-xs"></div>
+                    <div class="w-2.5 h-1 ${bgClass} rounded-xs"></div>
+                    <div class="w-2.5 h-1 ${bgClass} rounded-xs"></div>
+                    <span class="text-[8px] font-black text-center text-gray-400">10</span>
+                </div>`;
+            }
+            return html || '<span class="text-xs text-gray-400">0</span>';
+        }
+
+        function generateSingleUnits(count, color) {
+            let html = '';
+            const bgClass = color === 'sky' ? 'bg-sky-400' : 'bg-rose-400';
+            for (let i = 0; i < count; i++) {
+                html += `<div class="w-3 h-3 ${bgClass} rounded-xs shadow-xs" title="1개"></div>`;
+            }
+            return html || '<span class="text-xs text-gray-400">0</span>';
+        }
+
+        function toggleVisualManipulative() {
+            showManipulative = !showManipulative;
+            const area = document.getElementById('manipulativeArea');
+            const btn = document.getElementById('btnToggleManipulative');
+            if (showManipulative) { area.classList.remove('hidden'); btn.textContent = '모형 숨기기'; }
+            else { area.classList.add('hidden'); btn.textContent = '모형 보기'; }
+        }
+
+        function selectSlot(slotName) {
+            if (currentActivity !== 'act4' && (slotName === 'tens1' || slotName === 'ones1' || slotName === 'operator' || slotName === 'tens2' || slotName === 'ones2')) {
+                return; // Numbers and operator fixed for Act 2 and 3
+            }
+            activeSlot = slotName;
+            highlightActiveSlot();
+        }
+
+        function switchFocusSlot() {
+            if (currentActivity === 'act4') {
+                const slots = ['tens1', 'ones1', 'operator', 'tens2', 'ones2', 'onesAns', 'tensAns'];
+                let idx = slots.indexOf(activeSlot);
+                idx = (idx + 1) % slots.length;
+                activeSlot = slots[idx];
+            } else {
+                activeSlot = activeSlot === 'onesAns' ? 'tensAns' : 'onesAns';
+            }
+            highlightActiveSlot();
+        }
+
+        function highlightActiveSlot() {
+            const slots = {
+                tens1: document.getElementById('gridTens1'),
+                ones1: document.getElementById('gridOnes1'),
+                operator: document.getElementById('gridOperator'),
+                tens2: document.getElementById('gridTens2'),
+                ones2: document.getElementById('gridOnes2'),
+                tensAns: document.getElementById('inputTens'),
+                onesAns: document.getElementById('inputOnes')
+            };
+
+            Object.keys(slots).forEach(key => {
+                const el = slots[key];
+                if (key === activeSlot) {
+                    el.classList.add('ring-4', 'ring-sky-300', 'border-cinna-primary', 'bg-sky-100');
+                } else {
+                    el.classList.remove('ring-4', 'ring-sky-300', 'border-cinna-primary', 'bg-sky-100');
+                }
+            });
+        }
+
+        function pressOperator(op) {
+            actGridState.operator = op;
+            updateGridDOMDisplay();
+            if (currentActivity === 'act4' && activeSlot === 'operator') {
+                activeSlot = 'tens2';
+                highlightActiveSlot();
+            }
+        }
+
+        function pressKey(key) {
+            if (key === 'clear') {
+                if (activeSlot === 'tensAns' || activeSlot === 'onesAns') {
+                    actGridState[activeSlot] = '';
+                } else {
+                    actGridState[activeSlot] = '?';
+                }
+            } else {
+                if (activeSlot === 'operator') {
+                    showToastNotification('연산 기호 입력칸입니다. 위의 "+ 더하기" 또는 "- 빼기" 버튼을 누르세요!');
+                    return;
+                }
+                actGridState[activeSlot] = key;
+
+                // Auto advance slots in Act 4 for friendly flow
+                if (currentActivity === 'act4') {
+                    if (activeSlot === 'tens1') activeSlot = 'ones1';
+                    else if (activeSlot === 'ones1') activeSlot = 'operator';
+                    else if (activeSlot === 'tens2') activeSlot = 'ones2';
+                    else if (activeSlot === 'ones2') activeSlot = 'onesAns';
+                    else if (activeSlot === 'onesAns') activeSlot = 'tensAns';
+                } else {
+                    if (activeSlot === 'onesAns') activeSlot = 'tensAns';
+                }
+            }
+            updateGridDOMDisplay();
+            highlightActiveSlot();
+        }
+
+        function setupKeyboardEvents() {
+            document.addEventListener('keydown', function(event) {
+                if (!document.getElementById('participantModal').classList.contains('hidden')) return;
+                if (event.key >= '0' && event.key <= '9') pressKey(event.key);
+                else if (event.key === '+') pressOperator('+');
+                else if (event.key === '-') pressOperator('-');
+                else if (event.key === 'Backspace' || event.key === 'Delete') pressKey('clear');
+                else if (event.key === 'Enter') submitAnswer();
+                else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'Tab') switchFocusSlot();
+            });
+        }
+
+        function submitAnswer() {
+            const prob = playList[currentProblemIndex];
+
+            if (currentActivity === 'act4') {
+                // Validation for Activity 4
+                if (actGridState.tens1 === '?' || actGridState.ones1 === '?' || actGridState.tens2 === '?' || actGridState.ones2 === '?' || actGridState.operator === '?') {
+                    showToastNotification('세로셈의 첫 번째 수, 두 번째 수, 연산 기호를 먼저 모두 완성해주세요! 🐾');
+                    return;
+                }
+                if (!actGridState.tensAns && !actGridState.onesAns) {
+                    showToastNotification('계산 결과 답(십의 자리/일의 자리)을 입력해주세요! 🐾');
+                    return;
+                }
+
+                const userNum1 = parseInt(actGridState.tens1 + actGridState.ones1, 10);
+                const userNum2 = parseInt(actGridState.tens2 + actGridState.ones2, 10);
+                const userOp = actGridState.operator;
+                const userAns = parseInt((actGridState.tensAns || '0') + (actGridState.onesAns || '0'), 10);
+
+                const isFormulaCorrect = (userNum1 === prob.num1) && (userNum2 === prob.num2) && (userOp === prob.operator);
+                const isAnsCorrect = (userAns === prob.answer);
+                const isCorrect = isFormulaCorrect && isAnsCorrect;
+
+                let detailMsg = "";
+                if (isCorrect) {
+                    detailMsg = `식(${userNum1} ${userOp} ${userNum2})과 답(${userAns}${prob.unit})을 모두 완벽하게 맞히셨습니다!`;
+                } else if (!isFormulaCorrect) {
+                    detailMsg = `문장에서 추출한 수와 연산기호가 맞지 않습니다.\n(올바른 식: ${prob.num1} ${prob.operator} ${prob.num2})`;
+                } else {
+                    detailMsg = `식은 아주 잘 만드셨는데, 계산 결과 답이 틀렸어요.\n(올바른 답: ${prob.answer}${prob.unit})`;
+                }
+
+                teacherRecords.push({
+                    timestamp: new Date().toLocaleString('ko-KR'),
+                    studentClass: participantInfo.studentClass || '미지정',
+                    studentName: participantInfo.studentName || '학습자',
+                    stage: `4활동 (연산 업! 업!) - ${prob.category}`,
+                    problemTitle: `입력식: ${userNum1}${userOp}${userNum2} (정답식: ${prob.num1}${prob.operator}${prob.num2})`,
+                    userAnswer: userAns,
+                    correctAnswer: prob.answer,
+                    isCorrect: isCorrect
+                });
+
+                updateSheetSummary();
+
+                if (isCorrect) {
+                    totalSolvedCount++;
+                    document.getElementById('solvedProblemCount').textContent = totalSolvedCount;
+                }
+                showFeedbackModal(isCorrect, prob, detailMsg);
+
+            } else {
+                // Validation for Activity 2 and 3
+                if (!actGridState.tensAns && !actGridState.onesAns) {
+                    showToastNotification('정답을 입력한 후 정답 확인 버튼을 눌러주세요! 🐾');
+                    return;
+                }
+
+                const userAns = parseInt((actGridState.tensAns || '0') + (actGridState.onesAns || '0'), 10);
+                const isCorrect = userAns === prob.answer;
+                const actLabel = currentActivity === 'act2' ? `2활동 (${prob.stage}단계)` : `3활동 (랜덤 ${currentProblemIndex + 1}/10)`;
+
+                teacherRecords.push({
+                    timestamp: new Date().toLocaleString('ko-KR'),
+                    studentClass: participantInfo.studentClass || '미지정',
+                    studentName: participantInfo.studentName || '학습자',
+                    stage: `${actLabel} - ${prob.category}`,
+                    problemTitle: `${prob.num1} ${prob.operator} ${prob.num2}`,
+                    userAnswer: userAns,
+                    correctAnswer: prob.answer,
+                    isCorrect: isCorrect
+                });
+
+                updateSheetSummary();
+
+                if (isCorrect) {
+                    totalSolvedCount++;
+                    document.getElementById('solvedProblemCount').textContent = totalSolvedCount;
+                }
+                showFeedbackModal(isCorrect, prob, isCorrect ? `정답 ${prob.answer}${prob.unit}을 맞히셨습니다!` : '차근차근 풀이 힌트를 참고해서 십의 자리와 일의 자리를 다시 확인해보세요!');
+            }
+        }
+
+        function showFeedbackModal(isCorrect, prob, detailMessage) {
+            const modal = document.getElementById('feedbackModal');
+            const iconBox = document.getElementById('feedbackIcon');
+            const title = document.getElementById('feedbackTitle');
+            const msg = document.getElementById('feedbackMessage');
+
+            modal.classList.remove('hidden');
+
+            if (isCorrect) {
+                iconBox.className = "w-20 h-20 mx-auto mb-3 rounded-full flex items-center justify-center text-4xl bg-emerald-100 text-emerald-600";
+                iconBox.innerHTML = '<i class="fa-solid fa-star"></i>';
+                title.textContent = "참 잘했어요! 정답입니다 🐾";
+                title.className = "text-2xl font-black mb-1 text-cute text-emerald-700";
+            } else {
+                iconBox.className = "w-20 h-20 mx-auto mb-3 rounded-full flex items-center justify-center text-4xl bg-rose-100 text-rose-600";
+                iconBox.innerHTML = '<i class="fa-solid fa-heart-crack"></i>';
+                title.textContent = "아쉬워요! 다시 확인해 볼까요?";
+                title.className = "text-2xl font-black mb-1 text-cute text-rose-700";
+            }
+            msg.innerText = detailMessage;
+        }
+
+        function nextProblem() {
+            document.getElementById('feedbackModal').classList.add('hidden');
+            if (currentProblemIndex < playList.length - 1) {
+                currentProblemIndex++;
+                renderProblem();
+            } else {
+                if (currentActivity === 'act2') {
+                    unlockedActivities.act3 = true;
+                    updateTabLockUI();
+                    showToastNotification('축하합니다! 2활동(단계별 연습)을 완료하여 3활동(랜덤 도전)이 해제되었습니다! 🎉');
+                    switchActivity('act3');
+                } else if (currentActivity === 'act3') {
+                    unlockedActivities.act4 = true;
+                    updateTabLockUI();
+                    showToastNotification('축하합니다! 3활동을 완료하여 4활동(연산 업! 업!)이 해제되었습니다! 🎉');
+                    switchActivity('act4');
+                } else if (currentActivity === 'act4') {
+                    showToastNotification('대단해요! 4활동: 연산 업! 업! 5문제를 모두 멋지게 해결하셨습니다! 당신은 최고의 수학 요정! 🌟');
+                }
+            }
+        }
+
+        function openTeacherSheet() {
+            updateSheetSummary();
+            renderSheetTable();
+            document.getElementById('teacherSheetModal').classList.remove('hidden');
+        }
+
+        function closeTeacherSheet() {
+            document.getElementById('teacherSheetModal').classList.add('hidden');
+        }
+
+        function updateSheetSummary() {
+            document.getElementById('sheetStudentBadge').textContent = `${participantInfo.studentClass} ${participantInfo.studentName}`;
+            document.getElementById('sheetTotalSolved').textContent = `${teacherRecords.length}개`;
+
+            if (teacherRecords.length > 0) {
+                const correctCount = teacherRecords.filter(r => r.isCorrect).length;
+                const acc = Math.round((correctCount / teacherRecords.length) * 100);
+                document.getElementById('sheetAccuracy').textContent = `${acc}% (${correctCount}/${teacherRecords.length})`;
+            } else {
+                document.getElementById('sheetAccuracy').textContent = '0%';
+            }
+        }
+
+        function renderSheetTable() {
+            const tbody = document.getElementById('teacherSheetTableBody');
+            if (teacherRecords.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-gray-400">아직 저장된 학습 기록이 없습니다.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            [...teacherRecords].reverse().forEach(r => {
+                const badgeClass = r.isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800';
+                html += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-2.5 text-gray-500 text-[11px]">${r.timestamp}</td>
+                        <td class="p-2.5 font-bold">${r.studentClass} ${r.studentName}</td>
+                        <td class="p-2.5">${r.stage}</td>
+                        <td class="p-2.5 font-mono text-xs">${r.problemTitle}</td>
+                        <td class="p-2.5 font-bold">${r.userAnswer}</td>
+                        <td class="p-2.5 font-bold text-gray-600">${r.correctAnswer}</td>
+                        <td class="p-2.5"><span class="px-2 py-0.5 rounded text-xs font-bold ${badgeClass}">${r.isCorrect ? '정답 ○' : '오답 ✕'}</span></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function exportSheetData() {
+            if (teacherRecords.length === 0) {
+                showToastNotification('복사할 데이터가 없습니다.');
+                return;
+            }
+            let csvContent = "일시,학급,이름,단계,문제,제출답,정답,결과\n";
+            teacherRecords.forEach(r => {
+                csvContent += `"${r.timestamp}","${r.studentClass}","${r.studentName}","${r.stage}","${r.problemTitle}",${r.userAnswer},${r.correctAnswer},"${r.isCorrect ? '정답' : '오답'}"\n`;
+            });
+
+            const textArea = document.createElement("textarea");
+            textArea.value = csvContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToastNotification('학습 기록 데이터가 CSV 형식으로 클립보드에 복사되었습니다!\n구글 시트나 엑셀에 Ctrl+V 하세요.');
+            } catch (err) {
+                showToastNotification('클립보드 복사에 실패했습니다.');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function requestClearRecords() { document.getElementById('customConfirmModal').classList.remove('hidden'); }
+        function closeCustomConfirm() { document.getElementById('customConfirmModal').classList.add('hidden'); }
+        function confirmClearRecords() {
+            teacherRecords = [];
+            closeCustomConfirm();
+            updateSheetSummary();
+            renderSheetTable();
+            showToastNotification('학습 기록이 초기화되었습니다.');
+        }
+
+        function showToastNotification(msg, title = "알림") {
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMessage').innerText = msg;
+            document.getElementById('customToastModal').classList.remove('hidden');
+        }
+
+        function closeCustomToast() { document.getElementById('customToastModal').classList.add('hidden'); }
+
+        function readQuestionText() {
+            let textToRead = "";
+            if (currentActivity === 'act1') {
+                textToRead = document.getElementById('tutorialQuestionText').innerText;
+            } else {
+                const prob = playList[currentProblemIndex];
+                if (prob) textToRead = prob.title;
+            }
+
+            if ('speechSynthesis' in window && textToRead) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(textToRead);
+                utterance.lang = 'ko-KR';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function toggleAudioSpeech() {
+            isAudioEnabled = !isAudioEnabled;
+            const btn = document.getElementById('audioToggleBtn');
+            if (isAudioEnabled) {
+                btn.className = "w-8 h-8 md:w-9 md:h-9 rounded-full bg-amber-100 border border-amber-300 text-amber-800 flex items-center justify-center hover:bg-amber-200 transition";
+                readQuestionText();
+            } else {
+                btn.className = "w-8 h-8 md:w-9 md:h-9 rounded-full bg-gray-100 border border-gray-300 text-gray-400 flex items-center justify-center transition";
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function toggleFontSize() {
+            isLargeFont = !isLargeFont;
+            const qBox = document.getElementById('questionContainer');
+            if (isLargeFont) qBox.classList.add('udl-xlarge-text');
+            else qBox.classList.remove('udl-xlarge-text');
+        }
+
+        function toggleStepByStepHint() {
+            document.getElementById('stepHintBox').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
